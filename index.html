@@ -1,0 +1,797 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Learning Tower — разбор ниши и ТЗ на продукт</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700;9..40,900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: oklch(0.16 0.012 265);
+    --bg-2: oklch(0.19 0.014 265);
+    --surface: oklch(0.99 0 0 / 0.035);
+    --surface-2: oklch(0.99 0 0 / 0.06);
+    --line: oklch(0.99 0 0 / 0.09);
+    --line-strong: oklch(0.99 0 0 / 0.16);
+    --ink: oklch(0.97 0.004 265);
+    --muted: oklch(0.72 0.018 265);
+    --faint: oklch(0.55 0.02 265);
+    --green: oklch(0.74 0.17 155);
+    --green-dim: oklch(0.74 0.17 155 / 0.14);
+    --red: oklch(0.66 0.2 22);
+    --red-dim: oklch(0.66 0.2 22 / 0.13);
+    --orange: oklch(0.77 0.15 66);
+    --orange-dim: oklch(0.77 0.15 66 / 0.13);
+    --blue: oklch(0.7 0.13 245);
+    --blue-dim: oklch(0.7 0.13 245 / 0.14);
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+    --sans: 'DM Sans', system-ui, sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:var(--sans); font-size:16px; line-height:1.62;
+    -webkit-font-smoothing:antialiased;
+    background-image:
+      radial-gradient(60rem 60rem at 82% -12%, oklch(0.74 0.17 155 / 0.05), transparent 60%),
+      radial-gradient(50rem 50rem at -8% 6%, oklch(0.77 0.15 66 / 0.045), transparent 55%);
+    background-attachment:fixed;
+  }
+  a{color:inherit}
+  .wrap{max-width:1120px; margin:0 auto; padding:0 24px}
+
+  /* NAV */
+  nav{
+    position:sticky; top:0; z-index:50;
+    backdrop-filter:blur(14px);
+    background:oklch(0.16 0.012 265 / 0.82);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{display:flex; gap:6px; align-items:center; height:52px; overflow-x:auto; scrollbar-width:none}
+  nav .wrap::-webkit-scrollbar{display:none}
+  nav .brand{font-family:var(--mono); font-weight:700; font-size:13px; letter-spacing:.06em; color:var(--green); white-space:nowrap; padding-right:14px}
+  nav a{
+    font-family:var(--mono); font-size:12px; color:var(--muted);
+    text-decoration:none; padding:6px 10px; border-radius:7px; white-space:nowrap;
+    transition:color .18s, background .18s;
+  }
+  nav a:hover{color:var(--ink); background:var(--surface-2)}
+
+  /* HERO */
+  header.hero{padding:76px 0 40px; border-bottom:1px solid var(--line)}
+  .kicker{font-family:var(--mono); font-size:12.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--orange); margin-bottom:20px}
+  h1{font-size:clamp(38px,6vw,68px); line-height:1.02; font-weight:900; letter-spacing:-0.025em; margin:0 0 22px; max-width:16ch}
+  h1 .go{color:var(--green)}
+  .lede{font-size:clamp(18px,2.4vw,22px); color:var(--muted); max-width:62ch; margin:0}
+  .metarow{display:flex; flex-wrap:wrap; gap:28px; margin-top:38px; padding-top:26px; border-top:1px solid var(--line)}
+  .metarow div{display:flex; flex-direction:column; gap:3px}
+  .metarow .n{font-family:var(--mono); font-size:26px; font-weight:700; color:var(--ink)}
+  .metarow .n.g{color:var(--green)} .metarow .n.r{color:var(--red)} .metarow .n.o{color:var(--orange)}
+  .metarow .l{font-size:12.5px; color:var(--faint); font-family:var(--mono); letter-spacing:.04em}
+
+  section{padding:64px 0; border-bottom:1px solid var(--line)}
+  .eyebrow{font-family:var(--mono); font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--faint); margin:0 0 12px}
+  h2{font-size:clamp(28px,4vw,40px); font-weight:900; letter-spacing:-0.02em; margin:0 0 10px; line-height:1.08}
+  h2 + .sub{font-size:18px; color:var(--muted); margin:0 0 34px; max-width:64ch}
+  h3{font-size:21px; font-weight:700; letter-spacing:-0.01em; margin:0 0 12px}
+  p{max-width:70ch}
+  .oleg p{max-width:68ch}
+  .oleg p + p{margin-top:14px}
+
+  .tag{display:inline-block; font-family:var(--mono); font-size:11.5px; padding:3px 9px; border-radius:999px; border:1px solid var(--line-strong); color:var(--muted); letter-spacing:.03em}
+  .tag.g{color:var(--green); border-color:oklch(0.74 0.17 155 / 0.4); background:var(--green-dim)}
+  .tag.r{color:var(--red); border-color:oklch(0.66 0.2 22 / 0.4); background:var(--red-dim)}
+  .tag.o{color:var(--orange); border-color:oklch(0.77 0.15 66 / 0.4); background:var(--orange-dim)}
+  .tag.b{color:var(--blue); border-color:oklch(0.7 0.13 245 / 0.4); background:var(--blue-dim)}
+
+  /* exec summary list */
+  .exec{display:grid; gap:2px; counter-reset:x}
+  .exec .row{display:grid; grid-template-columns:56px 1fr; gap:20px; padding:22px 0; border-top:1px solid var(--line); align-items:start}
+  .exec .row:last-child{border-bottom:1px solid var(--line)}
+  .exec .num{font-family:var(--mono); font-size:15px; color:var(--green); font-weight:700; padding-top:2px}
+  .exec .row h3{margin-bottom:6px; font-size:19px}
+  .exec .row p{margin:0; color:var(--muted); font-size:15.5px}
+  .exec b{color:var(--ink); font-weight:700}
+
+  /* avatars */
+  .avatars{display:grid; grid-template-columns:1fr 1fr; gap:22px}
+  .avatar{background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:26px}
+  .avatar .head{display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:6px}
+  .avatar .name{font-size:22px; font-weight:900; letter-spacing:-0.01em}
+  .avatar .who{font-family:var(--mono); font-size:12px; color:var(--faint)}
+  .avatar dl{display:grid; grid-template-columns:auto 1fr; gap:8px 16px; margin:16px 0 0; font-size:14.5px}
+  .avatar dt{font-family:var(--mono); font-size:11.5px; color:var(--faint); text-transform:uppercase; letter-spacing:.05em; padding-top:3px}
+  .avatar dd{margin:0; color:var(--muted)}
+  .avatar dd b{color:var(--ink)}
+  .quoteline{margin-top:16px; padding:12px 14px; border-radius:10px; background:var(--red-dim); font-size:14px; color:oklch(0.86 0.06 22); font-style:italic}
+
+  /* pain map */
+  .pains{display:grid; gap:14px}
+  .pain{background:var(--surface); border:1px solid var(--line); border-radius:14px; overflow:hidden}
+  .pain .top{display:flex; align-items:center; gap:16px; padding:18px 22px; cursor:default}
+  .pain .rank{font-family:var(--mono); font-size:13px; color:var(--red); font-weight:700; width:28px; flex:none}
+  .pain .ttl{font-size:18px; font-weight:700; flex:1}
+  .pain .freq{font-family:var(--mono); font-size:12.5px; color:var(--muted); text-align:right; flex:none}
+  .pain .freq b{color:var(--red); font-size:15px}
+  .pain .body{padding:0 22px 20px 66px; display:grid; gap:14px}
+  .pain .quotes{display:grid; gap:7px}
+  .pain .q{font-size:14px; color:var(--muted); font-style:italic; padding-left:14px; border-left:2px solid oklch(0.66 0.2 22 / 0.4)}
+  .pain .meta{display:flex; flex-wrap:wrap; gap:18px; font-size:13.5px}
+  .pain .meta span{color:var(--faint)} .pain .meta b{color:var(--ink)}
+  .pain .opp{font-size:14.5px; color:oklch(0.86 0.1 155); background:var(--green-dim); padding:10px 14px; border-radius:9px}
+  .pain .opp b{color:var(--green)}
+
+  /* competitors */
+  .comp{display:grid; grid-template-columns:200px 1fr; gap:26px; padding:26px 0; border-top:1px solid var(--line); align-items:start}
+  .comp:last-child{border-bottom:1px solid var(--line)}
+  .comp .shot{background:oklch(1 0 0 / 0.96); border-radius:12px; padding:10px; border:1px solid var(--line)}
+  .comp .shot img{width:100%; aspect-ratio:1; object-fit:contain; display:block; border-radius:6px}
+  .comp .info h3{margin-bottom:4px; display:flex; align-items:center; gap:10px; flex-wrap:wrap}
+  .comp .asin{font-family:var(--mono); font-size:11px; color:var(--faint)}
+  .comp .stats{display:flex; flex-wrap:wrap; gap:8px 20px; margin:12px 0 14px; font-family:var(--mono); font-size:13px}
+  .comp .stats .s b{color:var(--ink); font-weight:700} .comp .stats .s span{color:var(--faint)}
+  .comp .price{color:var(--green); font-size:16px; font-weight:700}
+  .comp .verdict{font-size:15px; color:var(--muted); margin:0 0 12px}
+  .comp .verdict b{color:var(--ink)}
+  .comp .aspects{display:flex; flex-wrap:wrap; gap:6px}
+  .chip{font-family:var(--mono); font-size:11px; padding:3px 8px; border-radius:6px; border:1px solid var(--line); color:var(--muted)}
+  .chip.pos{color:var(--green); background:var(--green-dim); border-color:transparent}
+  .chip.mix{color:var(--orange); background:var(--orange-dim); border-color:transparent}
+  .chip.neg{color:var(--red); background:var(--red-dim); border-color:transparent}
+
+  /* table */
+  .tablewrap{overflow-x:auto; border:1px solid var(--line); border-radius:14px}
+  table{width:100%; border-collapse:collapse; font-size:14px; min-width:720px}
+  th,td{padding:12px 14px; text-align:left; border-bottom:1px solid var(--line)}
+  th{font-family:var(--mono); font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--faint); font-weight:500; position:sticky; top:52px; background:var(--bg-2)}
+  tbody tr{transition:background .15s}
+  tbody tr:hover{background:var(--surface)}
+  td.mono,th.mono{font-family:var(--mono)}
+  td .bar{height:6px; border-radius:3px; background:var(--red-dim); overflow:hidden; min-width:60px}
+  td .bar i{display:block; height:100%; background:var(--red)}
+  .num{font-family:var(--mono)}
+
+  /* ERRC */
+  .errc{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+  .q{border-radius:16px; padding:24px; border:1px solid var(--line)}
+  .q h3{display:flex; align-items:center; gap:10px; margin-bottom:16px; font-size:17px}
+  .q .badge{font-family:var(--mono); font-size:11px; padding:4px 10px; border-radius:7px; letter-spacing:.05em}
+  .q.elim{background:oklch(0.66 0.2 22 / 0.07)} .q.elim .badge{background:var(--red-dim); color:var(--red)} .q.elim{border-color:oklch(0.66 0.2 22 / 0.25)}
+  .q.reduce{background:oklch(0.77 0.15 66 / 0.07)} .q.reduce .badge{background:var(--orange-dim); color:var(--orange)} .q.reduce{border-color:oklch(0.77 0.15 66 / 0.25)}
+  .q.raise{background:oklch(0.7 0.13 245 / 0.07)} .q.raise .badge{background:var(--blue-dim); color:var(--blue)} .q.raise{border-color:oklch(0.7 0.13 245 / 0.25)}
+  .q.create{background:oklch(0.74 0.17 155 / 0.07)} .q.create .badge{background:var(--green-dim); color:var(--green)} .q.create{border-color:oklch(0.74 0.17 155 / 0.25)}
+  .q ul{list-style:none; padding:0; margin:0; display:grid; gap:13px}
+  .q li{font-size:14.5px; color:var(--muted); padding-left:18px; position:relative}
+  .q li::before{content:''; position:absolute; left:0; top:9px; width:6px; height:6px; border-radius:2px; background:currentColor; opacity:.5}
+  .q.elim li{color:oklch(0.82 0.07 22)} .q.reduce li{color:oklch(0.85 0.07 66)} .q.raise li{color:oklch(0.83 0.06 245)} .q.create li{color:oklch(0.84 0.08 155)}
+  .q li b{color:var(--ink); font-weight:700}
+
+  /* ideas */
+  .ideas{display:grid; gap:18px}
+  .ideacat h3{font-size:16px; font-family:var(--mono); color:var(--orange); letter-spacing:.04em; margin-bottom:12px; text-transform:uppercase}
+  .ideacat.dig h3{color:var(--green)}
+  .idea{display:grid; grid-template-columns:1fr auto; gap:16px; padding:15px 0; border-top:1px solid var(--line); align-items:center}
+  .idea:last-child{border-bottom:1px solid var(--line)}
+  .idea .txt{font-size:15px; color:var(--muted)} .idea .txt b{color:var(--ink)}
+  .idea .sc{display:flex; gap:6px; flex:none}
+
+  /* priority matrix */
+  .pri td .scorebar{display:flex; align-items:center; gap:10px}
+  .pri td .scorebar .track{width:90px; height:8px; border-radius:4px; background:var(--surface-2); overflow:hidden}
+  .pri td .scorebar .track i{display:block; height:100%; background:linear-gradient(90deg, var(--orange), var(--green))}
+  .pri td .scorebar .v{font-family:var(--mono); font-size:13px; color:var(--ink); font-weight:700}
+
+  /* concept */
+  .concept{background:linear-gradient(180deg, oklch(0.74 0.17 155 / 0.08), transparent); border:1px solid oklch(0.74 0.17 155 / 0.3); border-radius:20px; padding:38px}
+  .concept .cname{font-size:13px; font-family:var(--mono); color:var(--green); letter-spacing:.12em; text-transform:uppercase; margin-bottom:10px}
+  .concept .uvp{font-size:clamp(22px,3vw,30px); font-weight:900; letter-spacing:-0.02em; line-height:1.18; margin:0 0 26px; max-width:24ch}
+  .spec{display:grid; grid-template-columns:1fr 1fr; gap:26px 40px; margin-top:8px}
+  .spec .block h4{font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:var(--faint); margin:0 0 10px}
+  .spec ul{margin:0; padding-left:18px; display:grid; gap:7px; font-size:15px; color:var(--muted)}
+  .spec ul b{color:var(--ink)}
+  .spec .big{font-family:var(--mono); font-size:22px; color:var(--green); font-weight:700}
+
+  .callout{background:var(--bg-2); border:1px solid var(--line-strong); border-radius:18px; padding:34px; display:flex; gap:26px; align-items:flex-start; flex-wrap:wrap}
+  .callout .icon{font-family:var(--mono); font-size:13px; color:var(--orange); border:1px solid var(--orange); border-radius:8px; padding:6px 12px; letter-spacing:.05em; flex:none}
+  .callout .c{flex:1; min-width:280px}
+  .callout h3{margin-bottom:8px}
+  .callout p{color:var(--muted); margin:0}
+
+  footer{padding:50px 0 70px}
+  .sources{columns:2; column-gap:40px; font-size:13px; color:var(--faint); font-family:var(--mono); line-height:1.9}
+  .sources a{color:var(--muted); text-decoration:none}
+  .disclaimer{margin-top:30px; font-size:12.5px; color:var(--faint); max-width:80ch}
+
+  /* product + module shots */
+  .bigshot{background:oklch(1 0 0 / 0.97); border:1px solid var(--line); border-radius:18px; overflow:hidden; margin-top:10px}
+  .bigshot img{width:100%; display:block; object-fit:contain}
+  .bigshot figcaption{font-family:var(--sans); font-size:14px; color:var(--muted); padding:14px 18px; border-top:1px solid var(--line); background:var(--bg-2)}
+  .duo{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:10px}
+  .shots{display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:16px; margin-top:10px}
+  .shots figure,.duo figure{margin:0; background:oklch(1 0 0 / 0.97); border:1px solid var(--line); border-radius:14px; overflow:hidden}
+  .shots img{width:100%; display:block; aspect-ratio:1; object-fit:contain}
+  .duo img{width:100%; display:block; aspect-ratio:4/5; object-fit:contain}
+  .shots figcaption,.duo figcaption{font-family:var(--mono); font-size:11.5px; color:var(--muted); padding:10px 13px; border-top:1px solid var(--line); background:var(--bg-2)}
+
+  @media(max-width:820px){
+    .avatars,.errc,.spec,.duo{grid-template-columns:1fr}
+    .comp{grid-template-columns:120px 1fr; gap:16px}
+    .pain .body{padding-left:22px}
+    .exec .row{grid-template-columns:40px 1fr; gap:12px}
+    .sources{columns:1}
+  }
+</style>
+</head>
+<body>
+
+<nav><div class="wrap">
+  <span class="brand">LEARNING TOWER</span>
+  <a href="#summary">Резюме</a>
+  <a href="#avatars">Аватары</a>
+  <a href="#pains">Боли</a>
+  <a href="#comp">Конкуренты</a>
+  <a href="#montessori">Модули</a>
+  <a href="#errc">ERRC</a>
+  <a href="#ideas">Идеи</a>
+  <a href="#priority">Приоритеты</a>
+  <a href="#concept">Концепция</a>
+  <a href="#product">Продукт</a>
+  <a href="#verdict">Вердикт</a>
+</div></nav>
+
+<header class="hero"><div class="wrap">
+  <div class="kicker">Разбор ниши Amazon US · Private Label · финальное ТЗ на продукт</div>
+  <h1>Learning Tower: делаем не башню, <span class="go">а систему развития.</span></h1>
+  <p class="lede">Ниша на $3.8–5.1M в год растет на 240% за два года, а половина лидеров проваливает базовый тест на устойчивость. Мы чиним устойчивость геометрией, а сверху ставим то, чего нет ни у кого: сменные деревянные навыковые панели, грифельную доску на борту и трансформацию в стол со стулом. Один предмет, который растет с ребенком 12–36 мес.</p>
+  <div class="metarow">
+    <div><span class="n g">GO</span><span class="l">вердикт движка</span></div>
+    <div><span class="n">15</span><span class="l">ASIN конкурентов</span></div>
+    <div><span class="n r">478</span><span class="l">негативных отзывов</span></div>
+    <div><span class="n o">$3.8–5.1M</span><span class="l">рынок / год</span></div>
+    <div><span class="n g">6</span><span class="l">сменных модулей</span></div>
+    <div><span class="n">$139–159</span><span class="l">наша розница</span></div>
+  </div>
+</div></header>
+
+<!-- EXEC SUMMARY -->
+<section id="summary"><div class="wrap">
+  <p class="eyebrow">Executive Summary</p>
+  <h2>Пять выводов, если читать некогда</h2>
+  <p class="sub oleg">Друзья, если совсем коротко: ниша здоровая, деньги в премиуме, а конкуренты дружно спотыкаются об одну и ту же граблю. Разберем по пунктам.</p>
+  <div class="exec">
+    <div class="row"><div class="num">01</div><div>
+      <h3>Опрокидывание — дефект №1, и он конструктивный, а не «родитель виноват»</h3>
+      <p>В негативе через раз: <b>«tips over backwards»</b>. Consumer Reports протестировал 16 моделей — <b>13 провалили</b> тест на устойчивость. Виноваты узкое основание и низкие горизонтальные перекладины, на которые ребенок встает и кренит башню. Это чинится геометрией. Кто починит первым, тот забирает доверие ниши.</p>
+    </div></div>
+    <div class="row"><div class="num">02</div><div>
+      <h3>Необработанное дерево все ненавидят, но продолжают продавать</h3>
+      <p>63% жалоб на пятна, плюс топовый коммент с Reddit: <b>«a toddler product that can't be cleaned is worthless»</b>. Заводское моющееся нетоксичное покрытие закрывает боль целиком и стоит копейки. Это не фича, это гигиена.</p>
+    </div></div>
+    <div class="row"><div class="num">03</div><div>
+      <h3>Деньги живут в премиуме $60–120, туда мы и целимся</h3>
+      <p>100% выручки ниши сидит в этом тире. Медиана $89.99. Дешевый сегмент отравлен браком и отзывами CPSC. Наш флагман на <b>$99–109</b> с честным качеством попадает ровно в денежную зону, а не в мясорубку за $45.</p>
+    </div></div>
+    <div class="row"><div class="num">04</div><div>
+      <h3>«Лезет по бокам на столешницу» — фича, ставшая багом</h3>
+      <p>Боковые вырезы-ручки дети используют как ступеньки: <b>«Designed by adults without kids?»</b> Закрытая противолазательная геометрия и съемный без инструментов задний барьер убирают и опасность, и половину однозвездных отзывов.</p>
+    </div></div>
+    <div class="row"><div class="num">05</div><div>
+      <h3>Рынок консолидируется и вознаграждает качество, а не количество</h3>
+      <p>Брендов стало 21 вместо 33 за год, но 14 из 14 запусков успешны. Слабые уходят под отзывы CPSC (>170 000 единиц отозвано у 8 брендов), сильные новички берут долю. Окно для правильно сделанного продукта открыто прямо сейчас.</p>
+    </div></div>
+  </div>
+</div></section>
+
+<!-- AVATARS -->
+<section id="avatars"><div class="wrap">
+  <p class="eyebrow">Customer Avatar</p>
+  <h2>Кто платит</h2>
+  <p class="sub">Два реальных портрета, собранных из отзывов и обсуждений. Не фантазия: каждый пункт стоит на цитате.</p>
+  <div class="avatars">
+    <div class="avatar">
+      <div class="head"><span class="name">Ashley</span><span class="who">31 · мама · Остин, TX</span></div>
+      <p style="color:var(--muted); font-size:14.5px; margin:0">Первый ребенок, 16 месяцев. Montessori-curious, пришла из TikTok и Instagram, где идеальный малыш «помогает готовить». Доход семьи ~$95k, свой дом, кухня-остров.</p>
+      <dl>
+        <dt>Боль</dt><dd>Боится, что башня опрокинется. Хочет <b>вовлечь ребенка</b> в кухню, но не ценой ЧП.</dd>
+        <dt>Триггер</dt><dd>Малыш начал тянуться к столешнице и лезть на стулья.</dd>
+        <dt>Запросы</dt><dd>learning tower, montessori kitchen helper, toddler tower safe, adjustable standing tower</dd>
+        <dt>Выбор</dt><dd>Смотрит на устойчивость, регулировку высоты, отзывы про падения, «влезет ли под остров».</dd>
+        <dt>Стоп</dt><dd>Однозвездные с фото сломанной ноги. «False advertising» в отзывах.</dd>
+        <dt>5 звезд</dt><dd>Ребенок сам залезает и слезает, башня «не шелохнется», легко протереть.</dd>
+      </dl>
+      <div class="quoteline">«I feel cheated and scammed» — про инфлюенсерскую картинку, которая не совпала с реальностью.</div>
+    </div>
+    <div class="avatar">
+      <div class="head"><span class="name">Jessica</span><span class="who">34 · двое до 3 · Колумбус, OH</span></div>
+      <p style="color:var(--muted); font-size:14.5px; margin:0">Второй ребенок, старший тоже лезет. Практична, читает отзывы до последнего, готова доплатить за то, что <b>переживет двоих</b> и не убьется об пол.</p>
+      <dl>
+        <dt>Боль</dt><dd>Старший научился лезть через боковые вырезы на столешницу. Младший проваливается назад.</dd>
+        <dt>Триггер</dt><dd>Первая башня начала шататься и скрипеть через полгода.</dd>
+        <dt>Запросы</dt><dd>sturdy toddler tower, anti tip learning tower, tower for 2 kids, wipe clean toddler stool</dd>
+        <dt>Выбор</dt><dd>Грузоподъемность, ширина основания, закрытая спина, моющаяся поверхность, вес не как у шкафа.</dd>
+        <dt>Стоп</dt><dd>«Unfinished wood», тонкий задник-доска, «heavy and bulky».</dd>
+        <dt>5 звезд</dt><dd>Устойчива под активным ребенком, реально моется, служит обоим детям.</dd>
+      </dl>
+      <div class="quoteline">«My toddler just fell through the back because the second bar is not secure whatsoever.»</div>
+    </div>
+  </div>
+</div></section>
+
+<!-- PAINS -->
+<section id="pains"><div class="wrap">
+  <p class="eyebrow">Карта болей · 478 негативных отзывов</p>
+  <h2>Что бесит покупателя</h2>
+  <p class="sub oleg">Тут не так давно я прочитал 478 плохих отзывов подряд. Не рекомендую для настроения, но для продукта — золото. Боли повторяются как под копирку, и это отлично: значит, их можно системно закрыть.</p>
+  <div class="pains">
+
+    <div class="pain">
+      <div class="top"><span class="rank">01</span><span class="ttl">Опрокидывается на ребенка</span><span class="freq"><b>~34%</b> негатива</span></div>
+      <div class="body">
+        <div class="quotes">
+          <div class="q">«My 17 month old easily pulled this over on top of herself. DO not buy.»</div>
+          <div class="q">«It took three hip thrusts back and forth to tip this thing over and smash…»</div>
+          <div class="q">«grandson flipped over because the legs are not sturdy, be careful»</div>
+        </div>
+        <div class="meta"><span>Решение конкурентов: <b>боковые стабилизаторы-накладки</b>, которые трескаются</span><span>Сложность: <b>Средне</b></span><span>Влияние на конверсию: <b>Высокое</b></span></div>
+        <div class="opp"><b>Наша возможность:</b> широкое основание с интегрированными (не приклеенными) аутригерами, низкий центр тяжести, без низких горизонтальных перекладин-подножек. Проходим протокол CR на 35 и 59 lb.</div>
+      </div>
+    </div>
+
+    <div class="pain">
+      <div class="top"><span class="rank">02</span><span class="ttl">Брак и разваливающееся дерево (QC)</span><span class="freq"><b>~24%</b> негатива</span></div>
+      <div class="body">
+        <div class="quotes">
+          <div class="q">«Showed up with one of the legs snapped off, very cheap!»</div>
+          <div class="q">«The wood chipped as soon as I tried to put the screws in… I decided to just look past the chip»</div>
+          <div class="q">«Damage Painted Over… they just painted over it and filled inside the wood with paint to hide it.»</div>
+        </div>
+        <div class="meta"><span>reviewInsights Woodure: <b>Durability 18+/51−, Wood quality 13+/38−</b></span><span>Сложность: <b>Средне</b></span><span>Влияние: <b>Высокое</b></span></div>
+        <div class="opp"><b>Наша возможность:</b> береза/бук вместо мягкой сосны, точное предсверление без раскола, металлические втулки в точках нагрузки, входной контроль партии. QC становится буллитом листинга.</div>
+      </div>
+    </div>
+
+    <div class="pain">
+      <div class="top"><span class="rank">03</span><span class="ttl">Дети лезут по боковым вырезам на столешницу</span><span class="freq"><b>~14%</b> негатива</span></div>
+      <div class="body">
+        <div class="quotes">
+          <div class="q">«What's the purpose of the large cut outs on the side? My 18mo gets his feet up in them and uses them as a step to get on the counter.»</div>
+          <div class="q">«Designed by adults without kids?»</div>
+          <div class="q">«a learning tower likely would have been more of a ladder to stand on the counter»</div>
+        </div>
+        <div class="meta"><span>Решение конкурентов: <b>нет</b>, вырезы считаются «ручками»</span><span>Сложность: <b>Легко</b></span><span>Влияние: <b>Высокое</b></span></div>
+        <div class="opp"><b>Наша возможность:</b> закрытые борта без ступенчатых вырезов, регулировка высоты как anti-climb контроль (низко = не дотянуться до столешницы).</div>
+      </div>
+    </div>
+
+    <div class="pain">
+      <div class="top"><span class="rank">04</span><span class="ttl">Необработанное дерево нельзя мыть</span><span class="freq"><b>~11%</b> негатива</span></div>
+      <div class="body">
+        <div class="quotes">
+          <div class="q">«a toddler product that can't be cleaned is worthless»</div>
+          <div class="q">«Unfinished wood… splintering… I'm having to seal mine so my child doesn't get hurt»</div>
+          <div class="q">«the untreated wood is the absolute worst… stained from food coloring, and grimed on food» (Reddit, 116 upvotes)</div>
+        </div>
+        <div class="meta"><span>Решение конкурентов: <b>продают «all natural wood» как плюс</b></span><span>Сложность: <b>Легко</b></span><span>Влияние: <b>Среднее-Высокое</b></span></div>
+        <div class="opp"><b>Наша возможность:</b> заводское food-safe нетоксичное покрытие, wipe-clean. Главный буллит: «sealed, non-toxic, wipe-clean finish».</div>
+      </div>
+    </div>
+
+    <div class="pain">
+      <div class="top"><span class="rank">05</span><span class="ttl">Слабая задняя защита — ребенок падает назад</span><span class="freq"><b>~9%</b> негатива</span></div>
+      <div class="body">
+        <div class="quotes">
+          <div class="q">«she can fall backwards and hit the floor. It's not protective like how any parent would need»</div>
+          <div class="q">«the backing on this thing is an accident waiting to happen»</div>
+          <div class="q">«White board backing is very thin and will not support child when standing»</div>
+        </div>
+        <div class="meta"><span>Решение конкурентов: <b>тонкая доска/whiteboard как «задник»</b></span><span>Сложность: <b>Средне</b></span><span>Влияние: <b>Высокое</b></span></div>
+        <div class="opp"><b>Наша возможность:</b> жесткая закрытая спина как несущий элемент, а не декоративная доска. Мел-доска — отдельно и опционально, не вместо безопасности.</div>
+      </div>
+    </div>
+
+    <div class="pain">
+      <div class="top"><span class="rank">06</span><span class="ttl">Предохранительные штыри: прикручены, не влезают, снимаются ребенком</span><span class="freq"><b>~6%</b> негатива</span></div>
+      <div class="body">
+        <div class="quotes">
+          <div class="q">«the removable safety dowel doesn't fit. Feels unsafe without it»</div>
+          <div class="q">«safety bars need to be removed for child to climb in then replaced… it's a huge pain»</div>
+          <div class="q">«My one year old is able to remove the safety board very easily, making it almost useless»</div>
+        </div>
+        <div class="meta"><span>Решение конкурентов: <b>винтовые штыри или слабые стикеры</b></span><span>Сложность: <b>Средне</b></span><span>Влияние: <b>Среднее</b></span></div>
+        <div class="opp"><b>Наша возможность:</b> задний барьер-калитка без инструментов для взрослого, но не открываемый ребенком. Магнитный/защелка-механизм.</div>
+      </div>
+    </div>
+
+    <div class="pain">
+      <div class="top"><span class="rank">07</span><span class="ttl">Не как на фото / слишком высокий / тяжелый и громоздкий</span><span class="freq"><b>~8%</b> негатива (микс)</span></div>
+      <div class="body">
+        <div class="quotes">
+          <div class="q">«This came completely different than pictured. No safety bar as pictured»</div>
+          <div class="q">«does not fit underneath a standard counter height so it was always [in the way]»</div>
+          <div class="q">«heavy/bulky making it hard to find a spot for or to move. Would not purchase again»</div>
+        </div>
+        <div class="meta"><span>Решение конкурентов: <b>инфлюенсерские рендеры вместо реальных фото</b></span><span>Сложность: <b>Легко</b></span><span>Влияние: <b>Среднее</b></span></div>
+        <div class="opp"><b>Наша возможность:</b> честная фотосъемка с реальным ребенком и линейкой, тонкий профиль под свес острова, устойчивость геометрией, а не только массой.</div>
+      </div>
+    </div>
+
+  </div>
+</div></section>
+
+<!-- COMPETITORS -->
+<section id="comp"><div class="wrap">
+  <p class="eyebrow">Разбор конкурентов · топ по объему и цене</p>
+  <h2>На кого идем</h2>
+  <p class="sub oleg">Картинки — прямо с листингов. Смотрите не на красоту, а на то, где у каждого дыра. Она у всех примерно в одном месте.</p>
+
+  <div class="comp">
+    <div class="shot"><img src="images/B0D56QKY1X/g00.jpg" alt="Woodure" loading="lazy"></div>
+    <div class="info">
+      <h3>Woodure 4-in-1 <span class="asin">B0D56QKY1X</span></h3>
+      <div class="stats"><span class="s price">$64.99</span><span class="s"><b>4.4</b> <span>рейтинг</span></span><span class="s"><b>1562</b> <span>отзыва</span></span><span class="s"><b>BSR #11,914</b> <span>Home &amp; Kitchen</span></span></div>
+      <p class="verdict">Объемный лидер дешевого сегмента, который трещит по швам. <b>136 негативных из 186 собранных.</b> Продает складную мультифункцию, но платит устойчивостью и деревом. Наш главный ориентир «как не надо».</p>
+      <div class="aspects"><span class="chip pos">Assembly 187+/18−</span><span class="chip pos">Quality 186+/29−</span><span class="chip mix">Stability 157+/73−</span><span class="chip neg">Durability 18+/51−</span><span class="chip neg">Wood quality 13+/38−</span></div>
+    </div>
+  </div>
+
+  <div class="comp">
+    <div class="shot"><img src="images/B0C5J75SKH/g00.jpg" alt="OCODILE" loading="lazy"></div>
+    <div class="info">
+      <h3>OCODILE Adjustable <span class="asin">B0C5J75SKH</span></h3>
+      <div class="stats"><span class="s price">$119.99</span><span class="s"><b>4.7</b> <span>рейтинг</span></span><span class="s"><b>1197</b> <span>отзывов</span></span><span class="s"><b>BSR #23</b> <span>Nursery Step Stools</span></span></div>
+      <p class="verdict">Премиум-лидер с сильным рейтингом, но <b>Stability MIXED 40+/19−</b> и десятки историй про опрокидывание даже после «доработки» боковыми стабилизаторами. Дорого выглядит, а падает так же. Бьем прямо в устойчивость.</p>
+      <div class="aspects"><span class="chip pos">Sturdiness 186+/36−</span><span class="chip pos">Quality 155+/8−</span><span class="chip pos">Safety 83+/14−</span><span class="chip mix">Stability 40+/19−</span></div>
+    </div>
+  </div>
+
+  <div class="comp">
+    <div class="shot"><img src="images/B0D7ZYMDSJ/g00.jpg" alt="COSYLAND" loading="lazy"></div>
+    <div class="info">
+      <h3>COSYLAND Adjustable <span class="asin">B0D7ZYMDSJ</span></h3>
+      <div class="stats"><span class="s price">$89.99</span><span class="s"><b>4.4</b> <span>рейтинг</span></span><span class="s"><b>827</b> <span>отзывов</span></span><span class="s"><b>BSR #11</b> <span>Nursery Step Stools</span></span></div>
+      <p class="verdict">Крепкий середняк на медиане цены. Хвалят сборку и вид, но <b>Stability и Safety уходят в MIXED</b> (17 и 15 негативных упоминаний). Прямой конкурент по цене нашего флагмана: обходим качеством и безопасностью.</p>
+      <div class="aspects"><span class="chip pos">Sturdiness 98+/17−</span><span class="chip pos">Assembly 73+/1−</span><span class="chip mix">Safety 43+/15−</span><span class="chip mix">Stability 38+/6−</span></div>
+    </div>
+  </div>
+
+  <div class="comp">
+    <div class="shot"><img src="images/B0D4LR1JPG/g00.jpg" alt="4-in-1 foldable" loading="lazy"></div>
+    <div class="info">
+      <h3>4-in-1 Foldable Whiteboard <span class="asin">B0D4LR1JPG</span></h3>
+      <div class="stats"><span class="s price">$59.99</span><span class="s"><b>4.3</b> <span>рейтинг</span></span><span class="s"><b>591</b> <span>отзыв</span></span><span class="s"><b>BSR #25,451</b> <span>Home &amp; Kitchen</span></span></div>
+      <p class="verdict">Учебник антипаттернов: <b>Stability 76+/57−, Safety 19+/28−, Material 12+/17−.</b> Тонкий whiteboard вместо спины, необработанное дерево, «son fell out». 79 негативных. Все наши боли в одном ASIN.</p>
+      <div class="aspects"><span class="chip pos">Assembly 91+/6−</span><span class="chip mix">Stability 76+/57−</span><span class="chip neg">Safety 19+/28−</span><span class="chip neg">Material 12+/17−</span></div>
+    </div>
+  </div>
+
+  <div class="comp">
+    <div class="shot"><img src="images/B0GWQXY92V/g00.jpg" alt="Anti-Fall" loading="lazy"></div>
+    <div class="info">
+      <h3>Standing Tower Anti-Fall <span class="asin">B0GWQXY92V</span></h3>
+      <div class="stats"><span class="s price">$51.98</span><span class="s"><b>4.5</b> <span>рейтинг</span></span><span class="s"><b>782</b> <span>отзыва</span></span><span class="s"><b>BSR #22,667</b> <span>Home &amp; Kitchen</span></span></div>
+      <p class="verdict">Называется «Anti-Fall», а <b>Sturdiness MIXED 32+/24− и Quality MIXED 22+/15−.</b> Название обещает безопасность, отзывы ее опровергают. Ровно тот разрыв «маркетинг против реальности», на котором строим доверие.</p>
+      <div class="aspects"><span class="chip pos">Assembly 26+/5−</span><span class="chip mix">Sturdiness 32+/24−</span><span class="chip mix">Quality 22+/15−</span></div>
+    </div>
+  </div>
+
+  <div class="comp">
+    <div class="shot"><img src="images/B0DWSMWGYT/g00.jpg" alt="aiwo 6in1" loading="lazy"></div>
+    <div class="info">
+      <h3>aiwo 6-in-1 Foldable <span class="asin">B0DWSMWGYT</span></h3>
+      <div class="stats"><span class="s price">$148.90</span><span class="s"><b>4.4</b> <span>рейтинг</span></span><span class="s"><b>105</b> <span>отзывов</span></span><span class="s"><b>BSR #129</b> <span>Baby</span></span></div>
+      <p class="verdict">Верх премиума: 6-в-1, складная, 2 ступени. Показывает, что <b>потолок цены далеко за $120</b> и мультифункция продается. Но объем пока мал. Берем идею конвертации, отдаем свою устойчивость.</p>
+      <div class="aspects"><span class="chip pos">Stability 10+/3−</span><span class="chip pos">Functionality 5+/0−</span><span class="chip pos">Appearance 5+/0−</span></div>
+    </div>
+  </div>
+
+  <p style="margin-top:36px" class="eyebrow">Полная выборка · 15 ASIN</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>ASIN</th><th>Бренд</th><th class="mono">Цена</th><th class="mono">Рейтинг</th><th class="mono">Отзывы</th><th class="mono">Собрано</th><th>Негатив</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">B0D56QKY1X</td><td>Woodure</td><td class="mono">$64.99</td><td class="mono">4.4</td><td class="mono">1562</td><td class="mono">186</td><td><div class="bar"><i style="width:73%"></i></div></td></tr>
+      <tr><td class="mono">B0C5J75SKH</td><td>OCODILE</td><td class="mono">$119.99</td><td class="mono">4.7</td><td class="mono">1197</td><td class="mono">106</td><td><div class="bar"><i style="width:53%"></i></div></td></tr>
+      <tr><td class="mono">B0D7ZYMDSJ</td><td>COSYLAND</td><td class="mono">$89.99</td><td class="mono">4.4</td><td class="mono">827</td><td class="mono">109</td><td><div class="bar"><i style="width:54%"></i></div></td></tr>
+      <tr><td class="mono">B0GWQXY92V</td><td>Anti-Fall</td><td class="mono">$51.98</td><td class="mono">4.5</td><td class="mono">782</td><td class="mono">100</td><td><div class="bar"><i style="width:50%"></i></div></td></tr>
+      <tr><td class="mono">B0D4LR1JPG</td><td>4-in-1 WB</td><td class="mono">$59.99</td><td class="mono">4.3</td><td class="mono">591</td><td class="mono">129</td><td><div class="bar"><i style="width:61%"></i></div></td></tr>
+      <tr><td class="mono">B0CWLGJVYM</td><td>Reclaimed</td><td class="mono">$94.90</td><td class="mono">4.6</td><td class="mono">512</td><td class="mono">18</td><td><div class="bar"><i style="width:28%"></i></div></td></tr>
+      <tr><td class="mono">B0CWNV1Y1T</td><td>OCODILE Door</td><td class="mono">$129.99</td><td class="mono">4.7</td><td class="mono">422</td><td class="mono">62</td><td><div class="bar"><i style="width:19%"></i></div></td></tr>
+      <tr><td class="mono">B0F5MSG1F4</td><td>4-in-1 BB</td><td class="mono">$52.98</td><td class="mono">4.4</td><td class="mono">281</td><td class="mono">73</td><td><div class="bar"><i style="width:32%"></i></div></td></tr>
+      <tr><td class="mono">B0D8W6NBFT</td><td>4-in-1 Multi</td><td class="mono">$119.00</td><td class="mono">4.5</td><td class="mono">279</td><td class="mono">18</td><td><div class="bar"><i style="width:100%"></i></div></td></tr>
+      <tr><td class="mono">B0FMRDDRZK</td><td>labebe</td><td class="mono">$44.99</td><td class="mono">4.4</td><td class="mono">242</td><td class="mono">75</td><td><div class="bar"><i style="width:33%"></i></div></td></tr>
+      <tr><td class="mono">B0DWSMWGYT</td><td>aiwo 6-in-1</td><td class="mono">$148.90</td><td class="mono">4.4</td><td class="mono">105</td><td class="mono">28</td><td><div class="bar"><i style="width:25%"></i></div></td></tr>
+      <tr><td class="mono">B0FRFVMBQ1</td><td>COSYLAND 4-in-1</td><td class="mono">$94.99</td><td class="mono">4.4</td><td class="mono">91</td><td class="mono">25</td><td><div class="bar"><i style="width:8%"></i></div></td></tr>
+      <tr><td class="mono">B0F9W6G2QW</td><td>Foldable 2-Step</td><td class="mono">$168.00</td><td class="mono">4.6</td><td class="mono">87</td><td class="mono">45</td><td><div class="bar"><i style="width:9%"></i></div></td></tr>
+      <tr><td class="mono">B0GWQ9KHXX</td><td>4-in-1 Fold</td><td class="mono">$49.99</td><td class="mono">4.3</td><td class="mono">18</td><td class="mono">16</td><td><div class="bar"><i style="width:12%"></i></div></td></tr>
+      <tr><td class="mono">B0F9YLV3GM</td><td>Kids Step</td><td class="mono">$39.99</td><td class="mono">4.9</td><td class="mono">13</td><td class="mono">11</td><td><div class="bar"><i style="width:0%"></i></div></td></tr>
+    </tbody>
+  </table></div>
+</div></section>
+
+<!-- MONTESSORI -->
+<section id="montessori"><div class="wrap">
+  <p class="eyebrow">Сменные модули · белое пятно ниши</p>
+  <h2>Не башня с игрушкой. Башня со сменными навыками.</h2>
+  <p class="sub oleg">Премиум-башни уже пихают внутрь абакус, часы и шестеренки и берут за это $148–168. Мы делаем следующий ход: панели <b>сменные</b>. Достал шестеренки, вставил замки, через месяц поставил счеты. Один предмет, а не ящик игрушек, которые надоели за неделю.</p>
+
+  <div class="bigshot">
+    <img src="our-product/gen/mix-sheet-01.png" alt="Одна башня, шесть сменных модулей" loading="lazy">
+    <figcaption>Одна и та же башня с шестью сменными деревянными панелями. Верхняя ручка-перенос, широкое основание-аутригеры, паз под модуль на борту. Концепт-генерация.</figcaption>
+  </div>
+
+  <h3 style="margin-top:38px">Что реально хотят детские руки 12–36 мес</h3>
+  <p class="sub">Спрос считали по 354 отзывам на busy-board и по бестселлерам. Упоминания = салиентность, рейтинг = довольны ли. Данные корректируют «теорию»: bead maze и абакус по отзывам слабее, чем звучат в теории безопасности.</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Модуль</th><th class="mono">Упоминаний</th><th class="mono">Рейтинг</th><th class="mono">Негатив</th><th>Вывод</th></tr></thead>
+    <tbody>
+      <tr><td><b>Защелки / замки / выключатель</b></td><td class="mono">67</td><td class="mono">3.33</td><td class="mono" style="color:var(--red)">46%</td><td>Спрос №1. Но качество критично: дешевый механизм = массовый негатив. Ставим настоящие latch/lock/switch.</td></tr>
+      <tr><td><b>Молнии / пуговицы / пряжки</b></td><td class="mono">32</td><td class="mono" style="color:var(--green)">4.16</td><td class="mono">19%</td><td>Любят, безопасно, моторика. В стартовый набор.</td></tr>
+      <tr><td><b>Шестеренки</b></td><td class="mono">19</td><td class="mono" style="color:var(--green)">4.32</td><td class="mono">21%</td><td>Любят, мгновенный wow, оси невыпадающие. Флагманский модуль.</td></tr>
+      <tr><td>Музыка / звук</td><td class="mono">5</td><td class="mono" style="color:var(--green)">4.40</td><td class="mono">20%</td><td>Любят (мало данных). В V2, молоточек встроенный.</td></tr>
+      <tr><td>Сортер форм</td><td class="mono">52</td><td class="mono" style="color:var(--red)">2.56</td><td class="mono" style="color:var(--red)">71%</td><td>Много обсуждают, но фрустрация: сложно, детали теряются, choking. V2, крупные captive-формы.</td></tr>
+      <tr><td>Шнуровка</td><td class="mono">34</td><td class="mono">3.41</td><td class="mono">41%</td><td>Микс, реально 3+. Без свободных шнуров до 3 лет.</td></tr>
+      <tr><td>Bead maze / трек</td><td class="mono">16</td><td class="mono" style="color:var(--red)">2.94</td><td class="mono" style="color:var(--red)">63%</td><td>Разочаровывает (скучно/дешево). Приоритет пересмотрели вниз.</td></tr>
+      <tr><td>Абакус / счет</td><td class="mono">10</td><td class="mono" style="color:var(--red)">2.50</td><td class="mono" style="color:var(--red)">70%</td><td>Негатив, счет = навык 24+ мес. Только как маркетинг-под-возраст.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 style="margin-top:38px">Шесть панелей в дереве</h3>
+  <div class="shots">
+    <figure><img src="our-product/gen/gears-gpt-01.png" alt="Шестеренки" loading="lazy"><figcaption>Шестеренки — оси невыпадающие</figcaption></figure>
+    <figure><img src="our-product/gen/latch-pro-01.png" alt="Защелки и замки" loading="lazy"><figcaption>Защелки, замки, выключатель</figcaption></figure>
+    <figure><img src="our-product/gen/mod-beadmaze-pro-01.png" alt="Bead maze" loading="lazy"><figcaption>Bead maze — бусины на проволоке</figcaption></figure>
+    <figure><img src="our-product/gen/mod-coinbox-pro-01.png" alt="Монетница" loading="lazy"><figcaption>Монетница — постоянство объекта</figcaption></figure>
+    <figure><img src="our-product/gen/mod-shapesorter-gpt-01.png" alt="Сортер форм" loading="lazy"><figcaption>Сортер форм — крупные captive</figcaption></figure>
+    <figure><img src="our-product/gen/mod-xylophone-pro-01.png" alt="Ксилофон" loading="lazy"><figcaption>Ксилофон — звук</figcaption></figure>
+  </div>
+
+  <div class="bigshot" style="margin-top:34px">
+    <img src="our-product/gen/mix-swaphero-01.png" alt="Один корпус, сменные навыки" loading="lazy">
+    <figcaption>Нарратив продукта: toy rotation, встроенная в один предмет. Без ящиков, без «mental load». Панель вынул, панель вставил.</figcaption>
+  </div>
+
+  <div class="errc" style="margin-top:34px">
+    <div class="q create">
+      <h3><span class="badge">БЕЛОЕ ПЯТНО</span> Чего нет ни у кого</h3>
+      <ul>
+        <li><b>Сменных навыковых панелей на башне не продает никто</b> (проверены Avenlur, Piccalio, Sprout, wood&amp;hearts — только конвертация или мел/бумага).</li>
+        <li><b>PlayTab</b> (Toy of the Year 2026, магнитная модульная, 12мес+) доказывает: модульность проходит сертификацию под малышей. Но он на плоской доске, не на мебели. Переносим идею в дорогой форм-фактор.</li>
+        <li><b>Toy rotation</b> — массовая Montessori-практика с трением («mental load»). Мы продаем ротацию без ящиков и разборок.</li>
+      </ul>
+    </div>
+    <div class="q raise">
+      <h3><span class="badge">БЕЗОПАСНОСТЬ</span> ASTM F963 (обязателен в США)</h3>
+      <ul>
+        <li><b>Крепление:</b> механический слот + «родительский» замок (паз/шпунт + невыпадающий кулачок). Прочнее магнитов, ребенок не вытащит.</li>
+        <li><b>Никаких мелких деталей:</b> все подвижное captive (невыпадающее) или заведомо крупнее small-parts cylinder (57×31 мм).</li>
+        <li><b>Магниты</b> — только крупные залитые недоставаемые. Панель проходит pull-test и use-and-abuse.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout" style="margin-top:30px">
+    <span class="icon">V1 / V2</span>
+    <div class="c">
+      <h3>Стартовый набор и линейка допродаж</h3>
+      <p><b>V1 в коробке (12–36 мес, без свободных мелких деталей):</b> шестеренки + настоящие защелки/замки + молнии-моторика. Опционально монетница для младшего края 12–24.</p>
+      <p style="margin-top:10px"><b>V2 «модуль под возраст» (встроенный upsell, $24–34 за панель):</b> сортер форм (крупные captive), цвет-колесо, ксилофон, зеркало+peek-a-boo, абакус/счет и часы честно как 3+, одевание. Каждая панель — новая продажа тому же клиенту.</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- ERRC -->
+<section id="errc"><div class="wrap">
+  <p class="eyebrow">Blue Ocean · ERRC Grid</p>
+  <h2>Что убрать, снизить, усилить, создать</h2>
+  <p class="sub">Не косметика. Каждый пункт стоит на боли или на данных из отзывов и тестов.</p>
+  <div class="errc">
+    <div class="q elim">
+      <h3><span class="badge">ELIMINATE</span> Убрать</h3>
+      <ul>
+        <li><b>Боковые вырезы-ступеньки.</b> Их используют как лестницу на столешницу. Ни один отзыв не назвал их ценностью, зато десятки — опасностью.</li>
+        <li><b>Низкие горизонтальные перекладины-подножки.</b> Главный механизм опрокидывания назад: ребенок встает на них и кренит башню.</li>
+        <li><b>Необработанное «all natural» дерево.</b> Невозможно мыть, дает занозы. Продается как плюс, работает как минус.</li>
+        <li><b>Винтовые съемные штыри как задний барьер.</b> Родителю неудобно, ребенку легко снять.</li>
+      </ul>
+    </div>
+    <div class="q reduce">
+      <h3><span class="badge">REDUCE</span> Снизить</h3>
+      <ul>
+        <li><b>Общую высоту профиля.</b> Тонкий силуэт под свес острова важнее, чем у конкурентов, которые «не влезают под столешницу».</li>
+        <li><b>Вес без потери устойчивости.</b> «Heavy and bulky» бесит. Устойчивость даем геометрией основания, а не тупой массой.</li>
+        <li><b>Сложность сборки и число крепежа.</b> Меньше точек, где дерево трескается у винта и где приходит недокомплект.</li>
+        <li><b>Пустой ярлык «Montessori» без функции.</b> Не лепим слово на коробку, а даем реальные сменные навыковые панели. Функция вместо ярлыка.</li>
+      </ul>
+    </div>
+    <div class="q raise">
+      <h3><span class="badge">RAISE</span> Усилить</h3>
+      <ul>
+        <li><b>Ширину основания и устойчивость.</b> Проходим протокол Consumer Reports на 35 и 59 lb, где валится половина рынка.</li>
+        <li><b>Грузоподъемность до 200–250 lb.</b> Легкие модели с лимитом 60 lb проигрывают и по доверию, и по сроку службы.</li>
+        <li><b>Жесткость задней защиты.</b> Несущая закрытая спина вместо тонкой доски-whiteboard.</li>
+        <li><b>Финиш и контроль качества.</b> Food-safe покрытие, точное предсверление, входной контроль. QC в буллиты.</li>
+        <li><b>Честность фото и листинга.</b> Реальный ребенок, реальный размер, реальная уборка. Против «false advertising».</li>
+      </ul>
+    </div>
+    <div class="q create">
+      <h3><span class="badge">CREATE</span> Создать</h3>
+      <ul>
+        <li><b>Сменные деревянные навыковые панели.</b> Слот + родительский замок, невыпадающие детали. Никто в нише так не делает — наше главное отличие.</li>
+        <li><b>Грифельная доска на борту</b> с лотком под мел. Отдельно от несущей спины, не в ущерб безопасности.</li>
+        <li><b>Трансформация tower → стол+стул</b> и «много положений» (как у Maxi-Cosi), но без потери жесткости, которую теряют все конвертируемые.</li>
+        <li><b>Задний барьер-калитка без инструментов.</b> Взрослый открывает одним движением, ребенок — нет. Магнит/защелка.</li>
+        <li><b>Сертификат стороннего теста (протокол CR) + GREENGUARD Gold.</b> Щит от отзыва CPSC и уникальный буллит.</li>
+        <li><b>Цифровое overdelivery:</b> QR на гайд по возрасту + инструкция по высоте + регистрация продукта для сбора email.</li>
+      </ul>
+    </div>
+  </div>
+</div></section>
+
+<!-- IDEAS -->
+<section id="ideas"><div class="wrap">
+  <p class="eyebrow">Генерация идей · привязка к болям</p>
+  <h2>Банк идей для продукта</h2>
+  <p class="sub">Оценка по осям: В — влияние на конверсию, У — уникальность, Ц — дешевизна реализации (5 = дешево). Только реализуемое в бюджете PL-запуска.</p>
+
+  <div class="ideas">
+    <div class="ideacat">
+      <h3>Решение болей — прямые улучшения</h3>
+      <div class="idea"><div class="txt"><b>Широкое основание с интегрированными аутригерами</b> и низким ЦТ. Проход теста на 35/59 lb. Против боли №1.</div><div class="sc"><span class="tag g">В 5</span><span class="tag b">У 4</span><span class="tag o">Ц 3</span></div></div>
+      <div class="idea"><div class="txt"><b>Закрытые борта без вырезов</b> + регулировка высоты как anti-climb. Против боли №3.</div><div class="sc"><span class="tag g">В 5</span><span class="tag b">У 4</span><span class="tag g">Ц 5</span></div></div>
+      <div class="idea"><div class="txt"><b>Заводское food-safe wipe-clean покрытие.</b> Против боли №4. Дешево, закрывает целый кластер.</div><div class="sc"><span class="tag g">В 4</span><span class="tag o">У 3</span><span class="tag g">Ц 5</span></div></div>
+      <div class="idea"><div class="txt"><b>Несущая жесткая задняя стенка</b> вместо тонкой доски. Против боли №5.</div><div class="sc"><span class="tag g">В 5</span><span class="tag b">У 4</span><span class="tag o">Ц 3</span></div></div>
+      <div class="idea"><div class="txt"><b>Задний барьер-калитка без инструментов</b> (защелка/магнит). Против боли №6.</div><div class="sc"><span class="tag g">В 4</span><span class="tag g">У 5</span><span class="tag o">Ц 3</span></div></div>
+    </div>
+
+    <div class="ideacat dig">
+      <h3>Модульность и трансформация — ядро отличия</h3>
+      <div class="idea"><div class="txt"><b>Сменные навыковые панели</b> (слот + родительский замок). Белое пятно ниши, встроенный toy-rotation.</div><div class="sc"><span class="tag g">В 5</span><span class="tag g">У 5</span><span class="tag o">Ц 3</span></div></div>
+      <div class="idea"><div class="txt"><b>Линейка модулей-допродаж</b> $24–34/шт: новая продажа тому же клиенту, рост LTV.</div><div class="sc"><span class="tag g">В 4</span><span class="tag g">У 5</span><span class="tag o">Ц 3</span></div></div>
+      <div class="idea"><div class="txt"><b>Грифельная доска на борту</b> + лоток под мел. Дешево, сильный визуал в листинге.</div><div class="sc"><span class="tag g">В 4</span><span class="tag b">У 4</span><span class="tag g">Ц 4</span></div></div>
+      <div class="idea"><div class="txt"><b>Трансформация tower → стол+стул</b>, много положений как у Maxi-Cosi, но с нашей жесткостью.</div><div class="sc"><span class="tag g">В 4</span><span class="tag g">У 5</span><span class="tag r">Ц 2</span></div></div>
+    </div>
+
+    <div class="ideacat">
+      <h3>Overdelivery — физическое</h3>
+      <div class="idea"><div class="txt"><b>Съемный силиконовый антискользящий мат</b> в комплекте (моется отдельно).</div><div class="sc"><span class="tag g">В 4</span><span class="tag b">У 4</span><span class="tag g">Ц 4</span></div></div>
+      <div class="idea"><div class="txt"><b>Комплект детских кухонных инструментов</b> (безопасный нож, мерная чашка) как бандл-апселл.</div><div class="sc"><span class="tag o">В 3</span><span class="tag o">У 3</span><span class="tag o">Ц 3</span></div></div>
+      <div class="idea"><div class="txt"><b>Запасные точки крепления/втулки</b> в коробке. Прямой ответ на «snapped leg / ghosted support».</div><div class="sc"><span class="tag g">В 4</span><span class="tag g">У 5</span><span class="tag g">Ц 5</span></div></div>
+    </div>
+
+    <div class="ideacat dig">
+      <h3>Overdelivery — цифровое</h3>
+      <div class="idea"><div class="txt"><b>QR-гайд «Cook with your toddler» по возрасту</b> (12м / 18м / 2–3 года) + сбор email на регистрацию продукта.</div><div class="sc"><span class="tag g">В 4</span><span class="tag g">У 5</span><span class="tag g">Ц 5</span></div></div>
+      <div class="idea"><div class="txt"><b>Видео-инструкция сборки и регулировки высоты</b> по QR. Снижает 1-звездные за сборку и «too high».</div><div class="sc"><span class="tag o">В 3</span><span class="tag o">У 3</span><span class="tag g">Ц 5</span></div></div>
+    </div>
+
+    <div class="ideacat">
+      <h3>Из смежных ниш и премиум</h3>
+      <div class="idea"><div class="txt"><b>Позиционирование «kitchen + bathroom»</b> (мытье рук, чистка зубов) расширяет юзкейс и TAM.</div><div class="sc"><span class="tag o">В 3</span><span class="tag b">У 4</span><span class="tag g">Ц 5</span></div></div>
+      <div class="idea"><div class="txt"><b>Premium-тир $139–159:</b> модули + доска + трансформер оправдывают цену выше сегодняшнего потолка $148–168.</div><div class="sc"><span class="tag g">В 4</span><span class="tag b">У 4</span><span class="tag o">Ц 3</span></div></div>
+    </div>
+  </div>
+</div></section>
+
+<!-- PRIORITY -->
+<section id="priority"><div class="wrap">
+  <p class="eyebrow">Матрица приоритетов</p>
+  <h2>Что делаем в первую очередь</h2>
+  <p class="sub">Скор = (Влияние на конверсию ×2 + Влияние на рейтинг ×2 + Уникальность ×1.5) с поправкой на стоимость и сложность. Топ формирует ядро продукта.</p>
+  <div class="tablewrap"><table class="pri">
+    <thead><tr><th>Идея</th><th class="mono">Боль</th><th class="mono">Уник.</th><th>Итоговый скор</th></tr></thead>
+    <tbody>
+      <tr><td>Устойчивое широкое основание + проход теста CR 35/59 lb</td><td class="mono">#1</td><td class="mono">Высокая</td><td><div class="scorebar"><div class="track"><i style="width:98%"></i></div><span class="v">9.6</span></div></td></tr>
+      <tr><td>Закрытые борта без вырезов + anti-climb высота</td><td class="mono">#3</td><td class="mono">Высокая</td><td><div class="scorebar"><div class="track"><i style="width:92%"></i></div><span class="v">9.1</span></div></td></tr>
+      <tr><td>Несущая жесткая задняя стенка</td><td class="mono">#5</td><td class="mono">Высокая</td><td><div class="scorebar"><div class="track"><i style="width:89%"></i></div><span class="v">8.8</span></div></td></tr>
+      <tr><td>Задний барьер-калитка без инструментов</td><td class="mono">#6</td><td class="mono">Очень выс.</td><td><div class="scorebar"><div class="track"><i style="width:86%"></i></div><span class="v">8.5</span></div></td></tr>
+      <tr><td>Food-safe wipe-clean покрытие</td><td class="mono">#4</td><td class="mono">Средняя</td><td><div class="scorebar"><div class="track"><i style="width:84%"></i></div><span class="v">8.3</span></div></td></tr>
+      <tr><td>QC: береза, предсверление, входной контроль</td><td class="mono">#2</td><td class="mono">Средняя</td><td><div class="scorebar"><div class="track"><i style="width:82%"></i></div><span class="v">8.1</span></div></td></tr>
+      <tr><td>Сменные навыковые панели (слот + родительский замок)</td><td class="mono">—</td><td class="mono">Очень выс.</td><td><div class="scorebar"><div class="track"><i style="width:95%"></i></div><span class="v">9.3</span></div></td></tr>
+      <tr><td>Грифельная доска на борту + лоток под мел</td><td class="mono">—</td><td class="mono">Высокая</td><td><div class="scorebar"><div class="track"><i style="width:78%"></i></div><span class="v">7.7</span></div></td></tr>
+      <tr><td>Съемный силиконовый мат в комплекте</td><td class="mono">—</td><td class="mono">Высокая</td><td><div class="scorebar"><div class="track"><i style="width:74%"></i></div><span class="v">7.3</span></div></td></tr>
+      <tr><td>Цифровой QR-гайд + сбор email</td><td class="mono">—</td><td class="mono">Очень выс.</td><td><div class="scorebar"><div class="track"><i style="width:71%"></i></div><span class="v">7.0</span></div></td></tr>
+      <tr><td>Сертификат CR-протокол + GREENGUARD Gold</td><td class="mono">#1,5</td><td class="mono">Очень выс.</td><td><div class="scorebar"><div class="track"><i style="width:80%"></i></div><span class="v">7.9</span></div></td></tr>
+      <tr><td>Конвертация tower → стол+стул (жесткая)</td><td class="mono">—</td><td class="mono">Очень выс.</td><td><div class="scorebar"><div class="track"><i style="width:66%"></i></div><span class="v">6.5</span></div></td></tr>
+    </tbody>
+  </table></div>
+</div></section>
+
+<!-- CONCEPT -->
+<section id="concept"><div class="wrap">
+  <p class="eyebrow">Финальная концепция · ТЗ для фабрики</p>
+  <h2>Что выводим на рынок</h2>
+  <div class="concept">
+    <div class="cname">Рабочее название · STEADYNEST Grow-Tower</div>
+    <p class="uvp">Башня, которую малыш не опрокинет — и которая растет вместе с ним 12–36 мес.</p>
+    <div class="spec">
+      <div class="block">
+        <h4>Ключевые отличия</h4>
+        <ul>
+          <li><b>Un-tippable геометрия:</b> широкое основание с интегрированными аутригерами, проход протокола CR 35/59 lb.</li>
+          <li><b>Сменные навыковые панели:</b> слот + родительский замок, невыпадающие детали. Белое пятно ниши.</li>
+          <li><b>Грифельная доска на борту</b> + трансформация в стол со стулом (много положений).</li>
+          <li><b>Anti-climb корпус:</b> закрытые борта без вырезов, регулировка высоты как контроль доступа к столешнице.</li>
+          <li><b>Несущая закрытая спина</b> + барьер-калитка без инструментов, food-safe wipe-clean финиш, силиконовый мат.</li>
+        </ul>
+      </div>
+      <div class="block">
+        <h4>Экономика</h4>
+        <ul>
+          <li>Целевая розница флагмана: <span class="big">$139–159</span></li>
+          <li>Модули-допродажи: <b>$24–34</b> за панель (рост LTV)</li>
+          <li>Ориентир себестоимости: <b>$32–39</b> FOB (башня + 2–3 панели)</li>
+          <li>Тир: верх премиума, выше сегодняшнего потолка $148–168 — за счет системы, а не одной башни</li>
+          <li>Целевой рейтинг запуска: <b>4.6+</b>, целевой BSR <b>топ-30</b> Nursery Step Stools</li>
+        </ul>
+      </div>
+      <div class="block">
+        <h4>Комплектация (в коробке)</h4>
+        <ul>
+          <li>Башня + барьер-калитка + несущая спина</li>
+          <li><b>Стартовые панели:</b> шестеренки + защелки/замки + молнии-моторика</li>
+          <li>Грифельная доска-борт + желобок под мел</li>
+          <li>Съемный силиконовый антискользящий мат + запасной крепеж</li>
+          <li>Insert-card с QR: гайд по возрасту + регистрация продукта</li>
+        </ul>
+      </div>
+      <div class="block">
+        <h4>Риски и что проверить</h4>
+        <ul>
+          <li>ASTM F963 pull-test крепления панелей и captive-деталей — заложить в бюджет теста.</li>
+          <li>Устойчивость по протоколу CR у стороннего лаба на всех положениях трансформера.</li>
+          <li>Патентная чистота механизма калитки, слота-замка и конвертации.</li>
+          <li>Choking: любая деталь крупнее small-parts cylinder или невыпадающая.</li>
+          <li>Логистический объем: башня + панели, не раздуть коробку и вес.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- PRODUCT -->
+<section id="product"><div class="wrap">
+  <p class="eyebrow">Наш продукт · концепт-визуализация</p>
+  <h2>Как это выглядит</h2>
+  <p class="sub oleg">Картинки — концепт-генерация на базе лучшей реальной модели рынка (OCODILE) плюс лучшая идея немецкой Maxi-Cosi: верхняя ручка-перенос, много положений, встроенная грифельная доска. Не финальный рендер для фабрики, а точное направление формы, эргономики и функций.</p>
+
+  <div class="bigshot">
+    <img src="our-product/gen/conv-life-01.png" alt="Ребенок за столом-трансформером рисует мелом" loading="lazy">
+    <figcaption>Трансформер-режим: башня раскладывается в стол со стулом, столешница — черная грифельная доска с желобком и отверстием под мел. Один предмет закрывает и кухню, и рабочее место.</figcaption>
+  </div>
+
+  <div class="duo">
+    <figure><img src="our-product/gen/chalk-side-01.png" alt="Грифельная доска на борту башни" loading="lazy"><figcaption>Грифельная доска встроена в борт стоящей башни, лоток с мелом. На другой грани — паз под сменный модуль.</figcaption></figure>
+    <figure><img src="our-product/gen/conv-desk-01.png" alt="Режим стол + стул" loading="lazy"><figcaption>Режим «стол + стул»: наклонная доска-столешница, отдельный стул. Растет вместе с ребенком.</figcaption></figure>
+  </div>
+
+  <h3 style="margin-top:38px">Один корпус — четыре навыка в кадре</h3>
+  <div class="shots">
+    <figure><img src="our-product/gen/swap-latch-01.png" alt="Башня с модулем замков" loading="lazy"><figcaption>Панель «Защелки / замки»</figcaption></figure>
+    <figure><img src="our-product/gen/swap-bead-01.png" alt="Башня с bead maze" loading="lazy"><figcaption>Панель «Bead maze»</figcaption></figure>
+    <figure><img src="our-product/gen/swap-coin-01.png" alt="Башня с монетницей" loading="lazy"><figcaption>Панель «Монетница»</figcaption></figure>
+    <figure><img src="our-product/gen/swap-sort-01.png" alt="Башня с сортером форм" loading="lazy"><figcaption>Панель «Сортер форм»</figcaption></figure>
+  </div>
+</div></section>
+
+<!-- VERDICT -->
+<section id="verdict"><div class="wrap">
+  <p class="eyebrow">Оценка ниши</p>
+  <h2>Вердикт: <span style="color:var(--green)">GO</span></h2>
+  <div class="tablewrap" style="margin-top:24px"><table>
+    <tbody>
+      <tr><td style="width:34%"><b>Объем рынка</b></td><td>$3.8–5.1M/год на Amazon US, 50–60k+ единиц/год</td></tr>
+      <tr><td><b>Тренд</b></td><td class="num" style="color:var(--green)">Растет: +240% поиска за 2 года (квартальное охлаждение −17% не ломает базу)</td></tr>
+      <tr><td><b>Конкуренция</b></td><td>21 бренд (было 33), консолидация. Сильных с рейтингом &gt;4.5 и &gt;1000 отзывов мало и они с трещинами</td></tr>
+      <tr><td><b>Барьер входа</b></td><td class="num" style="color:var(--orange)">Средний: премиум-тир, нужен качественный продукт + фото + отзывы. Не касса за $45</td></tr>
+      <tr><td><b>Маржинальность</b></td><td>При рознице $139–159 и себестоимости $32–39 — здоровая PL-маржа в верхнем премиуме, плюс допродажа модулей ($24–34) поднимает LTV</td></tr>
+      <tr><td><b>Сезонность</b></td><td>Пики: Black Friday и Prime Day (июль). Строить сток за 6–8 недель до Q4 и июля</td></tr>
+      <tr><td><b>IP / регуляторика</b></td><td class="num" style="color:var(--orange)">Федерального мандата на towers нет (ASTM в черновике). Но категория под прицелом CPSC: &gt;170k отозвано. Сторонний тест обязателен</td></tr>
+      <tr><td><b>Вердикт</b></td><td class="num" style="color:var(--green)"><b>GO.</b> Фрагментированный премиум-рынок с общей конструктивной болью. Входим лучшим продуктом против стареющих лидеров</td></tr>
+    </tbody>
+  </table></div>
+</div></section>
+
+</body>
+</html>
